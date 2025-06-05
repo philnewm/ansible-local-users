@@ -1,11 +1,58 @@
 ---
 
-# Install tasks
-# INFO larger roles should only use **include_tasks** here
+- name: Get users file
+  become: false
+  when: local_users_file_path
+  ansible.builtin.stat:
+    path: "{{ local_users_file_path }}"
+  register: user_file
+  delegate_to: "localhost"
 
+- name: Check user-file exists
+  when: not user_file.stat.exists
+  ansible.builtin.fail:
+    msg: "User file '{{ local_users_file_path }}' not found"
 
-# INFO This task may be obsolete for your use-case
-- name: Gather package facts
-  ansible.builtin.package_facts:
+- name: Load users
+  ansible.builtin.include_vars:
+    file: "{{ local_users_file_path }}"
+
+- name: Get users via passwd
+  ansible.builtin.command:
+    cmd: "awk -F: '$3 >= 1000 && $3 != 65534 { print $1 }' /etc/passwd"
+  changed_when: false
+  register: local_users
+
+- name: Filter out excluded users
+  ansible.builtin.set_fact:
+    filtered_users: >-
+      {{
+        local_users.stdout_lines
+        | difference(local_users_excluded)
+      }}
+
+- name: Compute users to be managed
+  ansible.builtin.set_fact:
+    remaining_users: >-
+      {{
+        filtered_users
+        | difference(users | map(attribute='name') | list)
+      }}
+
+- name: Apply users
+  when: user.name not in filtered_users
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user
+    label: "{{ user.name }}"
+  ansible.builtin.include_tasks:
+    file: apply_users.yml
+
+- name: Remove users
+  loop: "{{ remaining_users }}"
+  loop_control:
+    loop_var: user
+  ansible.builtin.include_tasks:
+    file: remove_users.yml
 
 ...

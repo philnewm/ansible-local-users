@@ -1,0 +1,41 @@
+---
+
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ user.name }}"
+    comment: "{{ user.display_name }}"
+    password: "{{ user.password }}"
+    create_home: "{{ user.home }}"
+    group: "{{ user.group }}"
+    shell: "{{ user.shell }}"
+    state: present
+
+- name: Set up ssh access
+  when: user.remote_execution
+  block:
+    - name: Create .ssh directory
+      ansible.builtin.file:
+        path: "/home/{{ user.name }}/.ssh"
+        state: directory
+        owner: "{{ user.name }}"
+        group: "{{ user.group }}"
+        mode: '0700'
+
+    - name: Add admin public key
+      ansible.posix.authorized_key:
+        comment: "{{ user.key_comment }}"
+        user: "{{ user.name }}"
+        key: "{{ lookup('file', local_users_ssh_pub_key) }}"
+        manage_dir: true
+        state: present
+
+- name: Add passwordless sudo if applicable
+  when: user.passwordless_sudo
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ user.name }}"
+    content: "{{ user.name }} ALL=(ALL) NOPASSWD:ALL"
+    mode: '0440'
+    owner: root
+    group: root
+
+...

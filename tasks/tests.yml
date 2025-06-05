@@ -1,5 +1,35 @@
 ---
 
-# tests to verify role functionality
+- name: Load users
+  ansible.builtin.include_vars:
+    file: "{{ local_users_file_path }}"
+
+- name: Get users via passwd
+  ansible.builtin.command:
+    cmd: "awk -F: '$3 >= 1000 && $3 != 65534 { print $1 }' /etc/passwd"
+  changed_when: false
+  register: local_users
+
+- name: Filter out excluded users
+  ansible.builtin.set_fact:
+    filtered_users: >-
+      {{
+        local_users.stdout_lines
+        | difference(local_users_excluded)
+      }}
+
+- name: Test users present
+  loop: "{{ users | map(attribute='name') | list }}"
+  loop_control:
+    loop_var: user
+  ansible.builtin.assert:
+    that: user in filtered_users
+
+- name: Test users absent
+  loop: "{{ filtered_users }}"
+  loop_control:
+    loop_var: user
+  ansible.builtin.assert:
+    that: user in (users | map(attribute='name') | list)
 
 ...

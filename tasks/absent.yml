@@ -1,11 +1,27 @@
 ---
 
-# Uninstall and cleanup tasks
+- name: Get users file
+  become: false
+  when: local_users_file_path
+  ansible.builtin.stat:
+    path: "{{ local_users_file_path }}"
+  register: user_file
+  delegate_to: "localhost"
 
+- name: Check user-file exists
+  when: not user_file.stat.exists
+  ansible.builtin.fail:
+    msg: "User file '{{ local_users_file_path }}' not found"
 
-- name: Remove unused dependencies
-  become: true
-  ansible.builtin.package:
-    autoremove: true
+- name: Load users
+  ansible.builtin.include_vars:
+    file: "{{ local_users_file_path }}"
+
+- name: Remove users
+  loop: "{{ users | map(attribute='name') | list }}"
+  loop_control:
+    loop_var: user
+  ansible.builtin.include_tasks:
+    file: remove_users.yml
 
 ...

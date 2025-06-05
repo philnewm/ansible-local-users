@@ -1,0 +1,34 @@
+---
+
+users:
+  - name: "config-manager"
+    display_name: "Config Manager"
+    password: "{{ 'changeme' | password_hash('sha512') }}"
+    passwordless_sudo: true
+    home: false
+    desktop: false
+    shell: "/bin/bash"
+    group: "{{ local_users_sudo_group[ansible_os_family] }}"
+    remote_execution: true
+    key_comment: "ssh key for Ansible"
+  - name: "philnewm"
+    display_name: "Phil Newm"
+    password: "{{ 'changeme1' | password_hash('sha512') }}"
+    passwordless_sudo: false
+    home: true
+    desktop: true
+    shell: "/bin/bash"
+    group: "{{ local_users_sudo_group[ansible_os_family] }}"
+    remote_execution: true
+    key_comment: "ssh key for Ansible"
+  - name: guest
+    display_name: "Guest"
+    password: "{{ 'test_1234' | password_hash('sha512') }}"
+    passwordless_sudo: false
+    home: true
+    desktop: true
+    shell: "/bin/bash"
+    group: "{{ local_users_sudo_group[ansible_os_family] }}"
+    remote_execution: false
+
+...
