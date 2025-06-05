@@ -13,7 +13,20 @@
 - name: Set up ssh access
   when: user.remote_execution
   block:
+    - name: Test for public key file
+      become: false
+      ansible.builtin.stat:
+        path: "{{ local_users_ssh_pub_key }}"
+      register: public_key
+      delegate_to: "localhost"
+
+    - name: Key file not found
+      when: not public_key.stat.exists
+      ansible.builtin.debug:
+        msg: "Public key not found at {{ local_users_ssh_pub_key }}"
+
     - name: Create .ssh directory
+      when: public_key.stat.exists
       ansible.builtin.file:
         path: "/home/{{ user.name }}/.ssh"
         state: directory
@@ -22,6 +35,7 @@
         mode: '0700'
 
     - name: Add admin public key
+      when: public_key.stat.exists
       ansible.posix.authorized_key:
         comment: "{{ user.key_comment }}"
         user: "{{ user.name }}"

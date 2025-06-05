@@ -1,5 +1,6 @@
 ---
 
+
 - name: Get users file
   become: false
   when: local_users_file_path
