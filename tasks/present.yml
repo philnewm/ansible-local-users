@@ -41,7 +41,6 @@
       }}
 
 - name: Apply users
-  when: user.name not in filtered_users
   loop: "{{ users }}"
   loop_control:
     loop_var: user

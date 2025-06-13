@@ -1,6 +1,7 @@
 ---
 
 - name: Create user
+  when: user.name not in filtered_users
   ansible.builtin.user:
     name: "{{ user.name }}"
     comment: "{{ user.display_name }}"
