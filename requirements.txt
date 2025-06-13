@@ -1,4 +1,1 @@
-molecule==24.7.0
-molecule-plugins[vagrant]
-docker==7.1.0
 passlib
