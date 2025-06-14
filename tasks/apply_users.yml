@@ -1,6 +1,7 @@
 ---
 
 - name: Create user
+  become: true
   when: user.name not in filtered_users
   ansible.builtin.user:
     name: "{{ user.name }}"
@@ -27,6 +28,7 @@
         msg: "Public key not found at {{ local_users_ssh_pub_key }}"
 
     - name: Create .ssh directory
+      become: true
       when: public_key.stat.exists
       ansible.builtin.file:
         path: "/home/{{ user.name }}/.ssh"
@@ -36,6 +38,7 @@
         mode: '0700'
 
     - name: Add admin public key
+      become: true
       when: public_key.stat.exists
       ansible.posix.authorized_key:
         comment: "{{ user.key_comment }}"
@@ -45,6 +48,7 @@
         state: present
 
 - name: Add passwordless sudo if applicable
+  become: true
   when: user.passwordless_sudo
   ansible.builtin.copy:
     dest: "/etc/sudoers.d/{{ user.name }}"
