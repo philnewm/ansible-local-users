@@ -7,6 +7,7 @@ local_users_file_path: "{{ role_path }}/files/default_users.yml"
 local_users_ssh_pub_key: "~/.ssh/id_rsa.pub"
 local_users_excluded:
   - vagrant
+  - ansible
   - ubuntu
 
 local_users_sudo_group:

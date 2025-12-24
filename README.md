@@ -1,10 +1,11 @@
 # Local-users-Role
 
-[![Alma9-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/alma9-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/alma9-ci-caller.yml)  [![Rocky9-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/rocky9-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/rocky9-ci-caller.yml)  [![CentOSStream9-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/centosstream9-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/centosstream9-ci-caller.yml)  [![Debian12-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/debian12-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/debian12-ci-caller.yml)  [![Ubuntu2204-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/ubuntu2204-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/ubuntu2204-ci-caller.yml)
+[![Alma9-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/alma9-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/alma9-ci-caller.yml) [![Rocky9-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/rocky9-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/rocky9-ci-caller.yml) [![CentOSStream9-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/centosstream9-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/centosstream9-ci-caller.yml) [![Fedora43-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/fedora43-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/fedora43-ci-caller.yml)<br>
+[![Ubuntu2404-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/ubuntu2404-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/ubuntu2404-ci-caller.yml) [![Debian13-CI](https://github.com/philnewm/ansible-local-users/actions/workflows/debian13-ci-caller.yml/badge.svg)](https://github.com/philnewm/ansible-local-users/actions/workflows/debian13-ci-caller.yml)
 
 Create/Update and delete local users based on a `.yaml` file.
 
-This role includes a vagrant based molecule testing setup as a submodule at `molecule/`
+This role includes a molecule testing setup as a submodule at `molecule/`
 
 ## Structure
 
@@ -29,6 +30,7 @@ This role includes a vagrant based molecule testing setup as a submodule at `mol
  ┃ ┗ 📜 tests.yml
  ┗ 🗒️ README.md
  ┗ 📓 requirements.txt
+ ┗ 📜 requirements.yml
 
 ```
 
