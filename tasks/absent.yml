@@ -2,7 +2,7 @@
 
 - name: Get users file
   become: false
-  when: local_users_file_path
+  when: local_users_file_path is defined
   ansible.builtin.stat:
     path: "{{ local_users_file_path }}"
   register: user_file

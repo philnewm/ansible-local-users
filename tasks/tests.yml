@@ -24,6 +24,8 @@
     loop_var: user
   ansible.builtin.assert:
     that: user in filtered_users
+    fail_msg: "Failed to find user {{ user }}"
+    quiet: true
 
 - name: Test users absent
   loop: "{{ filtered_users }}"
@@ -31,5 +33,7 @@
     loop_var: user
   ansible.builtin.assert:
     that: user in (users | map(attribute='name') | list)
+    fail_msg: "User {{ user }} is still present"
+    quiet: true
 
 ...

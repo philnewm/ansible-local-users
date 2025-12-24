@@ -1,16 +1,19 @@
 ---
 
 - name: Remove user
+  become: true
   ansible.builtin.user:
     name: "{{ user }}"
     state: absent
 
 - name: Remove home dir
+  become: true
   ansible.builtin.file:
     path: "/home/{{ user }}"
     state: absent
 
 - name: Remove passwordless sudo file if it exists
+  become: true
   ansible.builtin.file:
     path: "/etc/sudoers.d/{{ user }}"
     state: absent

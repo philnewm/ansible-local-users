@@ -41,7 +41,7 @@
       become: true
       when: public_key.stat.exists
       ansible.posix.authorized_key:
-        comment: "{{ user.key_comment }}"
+        comment: "{{ user.key_comment | default(None) }}"
         user: "{{ user.name }}"
         key: "{{ lookup('file', local_users_ssh_pub_key) }}"
         manage_dir: true

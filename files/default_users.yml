@@ -8,7 +8,7 @@ users:
     home: false
     desktop: false
     shell: "/bin/bash"
-    group: "{{ local_users_sudo_group[ansible_os_family] }}"
+    group: "{{ local_users_sudo_group[ansible_facts.os_family] }}"
     remote_execution: true
     key_comment: "ssh key for Ansible"
   - name: "philnewm"
@@ -18,7 +18,7 @@ users:
     home: true
     desktop: true
     shell: "/bin/bash"
-    group: "{{ local_users_sudo_group[ansible_os_family] }}"
+    group: "{{ local_users_sudo_group[ansible_facts.os_family] }}"
     remote_execution: true
     key_comment: "ssh key for Ansible"
   - name: guest
@@ -28,7 +28,7 @@ users:
     home: true
     desktop: true
     shell: "/bin/bash"
-    group: "{{ local_users_sudo_group[ansible_os_family] }}"
+    group: "{{ local_users_sudo_group[ansible_facts.os_family] }}"
     remote_execution: false
 
 ...
