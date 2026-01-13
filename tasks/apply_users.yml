@@ -1,5 +1,13 @@
 ---
 
+- name: Create user group(s)
+  become: true
+  loop: "{{ user.groups | default([]) }}"
+  when: item is defined
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+
 - name: Create user
   become: true
   when: user.name not in filtered_users
@@ -8,7 +16,8 @@
     comment: "{{ user.display_name }}"
     password: "{{ user.password }}"
     create_home: "{{ user.home }}"
-    group: "{{ user.group }}"
+    group: "{{ user.name }}"
+    groups: "{{ user.groups }}"
     shell: "{{ user.shell }}"
     state: present
 
