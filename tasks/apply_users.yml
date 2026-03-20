@@ -16,8 +16,8 @@
     comment: "{{ user.display_name }}"
     password: "{{ user.password }}"
     create_home: "{{ user.home }}"
-    group: "{{ user.name }}"
-    groups: "{{ user.groups }}"
+    group: "{{ user.name | default(omit) }}"  # allow system defaults
+    groups: "{{ user.groups | default(omit) }}"  # allow system defaults
     shell: "{{ user.shell }}"
     state: present
 
