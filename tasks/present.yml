@@ -30,11 +30,4 @@
   ansible.builtin.include_tasks:
     file: apply_users.yml
 
-- name: Remove users
-  loop: "{{ obsolete_users }}"
-  loop_control:
-    loop_var: user
-  ansible.builtin.include_tasks:
-    file: remove_users.yml
-
 ...
