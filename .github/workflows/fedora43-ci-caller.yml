@@ -1,6 +1,6 @@
 ---
 
-name: Fedoar43
+name: Fedora43
 
 on:
   push:
