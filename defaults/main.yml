@@ -3,7 +3,45 @@
 # Variables for ansible-role-template
 
 state: present
-local_users_file_path: "{{ role_path }}/files/default_users.yml"
+local_users_users:
+  - name: "config-manager"
+    display_name: "Config Manager"
+    password: "{{ 'changeme' | password_hash('sha512') }}"
+    passwordless_sudo: true
+    home: false
+    desktop: false
+    shell: "/bin/bash"
+    group: "config-manager"
+    groups:
+      - "config-manager"
+      - "{{ local_users_sudo_group[ansible_facts.os_family] }}"
+    remote_execution: true
+    key_comment: "ssh key for Ansible"
+  - name: "philnewm"
+    display_name: "Phil Newm"
+    password: "{{ 'changeme1' | password_hash('sha512') }}"
+    passwordless_sudo: false
+    home: true
+    desktop: true
+    shell: "/bin/bash"
+    group: "philnewm"
+    groups:
+      - "philnewm"
+      - "{{ local_users_sudo_group[ansible_facts.os_family] }}"
+    remote_execution: true
+    key_comment: "ssh key for Ansible"
+  - name: guest
+    display_name: "Guest"
+    password: "{{ 'test_1234' | password_hash('sha512') }}"
+    passwordless_sudo: false
+    home: true
+    desktop: true
+    shell: "/bin/bash"
+    group: "guest"
+    groups:
+      - "guest"
+      - "{{ local_users_sudo_group[ansible_facts.os_family] }}"
+    remote_execution: false
 local_users_ssh_pub_key: "~/.ssh/id_rsa.pub"
 local_users_excluded:
   - vagrant

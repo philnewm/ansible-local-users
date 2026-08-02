@@ -1,9 +1,5 @@
 ---
 
-- name: Load users
-  ansible.builtin.include_vars:
-    file: "{{ local_users_file_path }}"
-
 - name: Get users via passwd
   ansible.builtin.command:
     cmd: "awk -F: '$3 >= 1000 && $3 != 65534 { print $1 }' /etc/passwd"
@@ -19,7 +15,7 @@
       }}
 
 - name: Test users present
-  loop: "{{ users | map(attribute='name') | list }}"
+  loop: "{{ local_users_users | map(attribute='name') | list }}"
   loop_control:
     loop_var: user
   ansible.builtin.assert:
@@ -32,7 +28,7 @@
   loop_control:
     loop_var: user
   ansible.builtin.assert:
-    that: user in (users | map(attribute='name') | list)
+    that: user in (local_users_users | map(attribute='name') | list)
     fail_msg: "User {{ user }} is still present"
     quiet: true
 

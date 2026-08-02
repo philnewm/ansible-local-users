@@ -1,22 +1,5 @@
 ---
 
-- name: Get users file
-  become: false
-  when: local_users_file_path is defined
-  ansible.builtin.stat:
-    path: "{{ local_users_file_path }}"
-  register: user_file
-  delegate_to: "localhost"
-
-- name: Check user-file exists
-  when: not user_file.stat.exists
-  ansible.builtin.fail:
-    msg: "User file '{{ local_users_file_path }}' not found"
-
-- name: Load users
-  ansible.builtin.include_vars:
-    file: "{{ local_users_file_path }}"
-
 - name: Get users via passwd
   ansible.builtin.command:
     cmd: "awk -F: '$3 >= 1000 && $3 != 65534 { print $1 }' /etc/passwd"
@@ -31,16 +14,16 @@
         | difference(local_users_excluded)
       }}
 
-- name: Compute users to be managed
+- name: Compute users to remove
   ansible.builtin.set_fact:
-    remaining_users: >-
+    obsolete_users: >-
       {{
         filtered_users
-        | difference(users | map(attribute='name') | list)
+        | difference(local_users_users | map(attribute='name') | list)
       }}
 
 - name: Apply users
-  loop: "{{ users }}"
+  loop: "{{ local_users_users }}"
   loop_control:
     loop_var: user
     label: "{{ user.name }}"
@@ -48,7 +31,7 @@
     file: apply_users.yml
 
 - name: Remove users
-  loop: "{{ remaining_users }}"
+  loop: "{{ obsolete_users }}"
   loop_control:
     loop_var: user
   ansible.builtin.include_tasks:
