@@ -8,9 +8,8 @@
     name: "{{ item }}"
     state: present
 
-- name: Create user
+- name: Create or update user
   become: true
-  when: user.name not in filtered_users
   ansible.builtin.user:
     name: "{{ user.name }}"
     comment: "{{ user.display_name }}"
@@ -18,8 +17,10 @@
     create_home: "{{ user.home }}"
     group: "{{ user.name | default(omit) }}"  # allow system defaults
     groups: "{{ user.groups | default(omit) }}"  # allow system defaults
+    append: false
     shell: "{{ user.shell }}"
     state: present
+  diff: true
 
 - name: Set up ssh access
   when: user.remote_execution
@@ -61,9 +62,10 @@
   when: user.passwordless_sudo
   ansible.builtin.copy:
     dest: "/etc/sudoers.d/{{ user.name }}"
-    content: "{{ user.name }} ALL=(ALL) NOPASSWD:ALL"
+    content: "{{ user.name }} ALL=(ALL) NOPASSWD:ALL\n"
     mode: '0440'
     owner: root
     group: root
+    validate: '/usr/sbin/visudo -cf %s'
 
 ...
