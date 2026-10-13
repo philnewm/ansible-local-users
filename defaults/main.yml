@@ -6,7 +6,7 @@ state: present
 local_users_users:
   - name: "config-manager"
     display_name: "Config Manager"
-    password: "{{ 'changeme' | password_hash('sha512') }}"
+    password: "{{ 'changeme1' | password_hash('sha512', 'fixedsalt1234567') }}"
     passwordless_sudo: true
     home: false
     desktop: false
@@ -19,7 +19,7 @@ local_users_users:
     key_comment: "ssh key for Ansible"
   - name: "philnewm"
     display_name: "Phil Newm"
-    password: "{{ 'changeme1' | password_hash('sha512') }}"
+    password: "{{ 'changeme1' | password_hash('sha512', 'fixedsalt1234567') }}"
     passwordless_sudo: false
     home: true
     desktop: true
@@ -32,7 +32,7 @@ local_users_users:
     key_comment: "ssh key for Ansible"
   - name: guest
     display_name: "Guest"
-    password: "{{ 'test_1234' | password_hash('sha512') }}"
+    password: "{{ 'changeme1' | password_hash('sha512', 'fixedsalt1234567') }}"
     passwordless_sudo: false
     home: true
     desktop: true
